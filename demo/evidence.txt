@@ -1,0 +1,118 @@
+# Grammar-Constrained Decoding Engine: observed evidence
+# Date: 22 Nov 2026. All numbers are from runs on the Spark, judged by
+# the same code (JSON parse + full schema validation in src/cfg.py).
+# Nothing below is claimed from the grammar alone.
+
+## Environment (verified at runtime)
+- Spark: GB10, 128 GB unified memory, disk 99 GB free before and after.
+  No model was downloaded; no new disk used.
+- Ollama 0.40.14, model gemma3:4b-it-q8_0 (5.0 GB, already on disk).
+- vLLM image vllm/vllm-openai:inkling-2-mini, vLLM 0.1.dev25855+g7cb5dae22,
+  xgrammar importable. Model thinkingmachines/Inkling-2-Mini (18.19 GiB
+  checkpoint, already in the HF cache).
+- Schemas: 6 real service contracts (see src/schemas.py).
+
+## Unit tests (live on the Spark)
+- Command: python3 -m unittest discover -s tests -v
+- Result: 30/30 pass. Covers grammar accept/reject, schema validation,
+  prefix allowed-chars, enum narrowing, tail type checks, forced
+  continuation, sampler masking with a fake backend, suite-runner stats,
+  and the vLLM request-body shape.
+
+## Demo 1: Ollama structured outputs, 100 guided + 100 unguided
+- Command: python3 demo/run_demo.py (detached; wall 390.5 s)
+- Model gemma3:4b-it-q8_0, temperature 0.7, same prompts both arms.
+- Guided (format=<json schema>):  100/100 valid JSON, 100/100 schema-valid.
+  Per schema: cloud_exec_envelope 17/17, dispatch_request 17/17,
+  memory_remember 17/17, memory_recall 17/17, voice_request 16/16,
+  gateway_query 16/16. Median 1.27 s, p95 6.5 s, mean 1.91 s,
+  median eval 47.3 tok/s.
+- Unguided (same prompts, no grammar): 0/100 directly parseable as JSON.
+  Median 1.44 s, p95 5.8 s, mean 2.0 s, median eval 51.7 tok/s.
+- Latency overhead (guided median / unguided median): 0.88x.
+  Guided is slightly FASTER, because guided outputs contain no
+  markdown fences or preamble; the grammar removes output, it does not
+  add tokens.
+- Why unguided scored 0/100: all 100 unguided outputs are wrapped in
+  ```json fences despite "Output only the JSON object" in the prompt.
+  After fence-stripping, 100/100 parse as JSON and 84/100 are
+  schema-valid. So even against a repaired baseline, guided wins by
+  16 points (100 vs 84) and needs no repair step.
+- Raw records: demo/results_guided.jsonl, demo/results_unguided.jsonl,
+  demo/summary.json.
+
+## Demo 2: vLLM structured outputs probe, Inkling-2-Mini
+- Server: docker run vllm/vllm-openai:inkling-2-mini
+  thinkingmachines/Inkling-2-Mini --gpu-memory-utilization 0.3
+  --max-model-len 8192 --port 8000 (loopback :18081).
+- Backend evidence: engine config logs
+  StructuredOutputsConfig(backend='auto', disable_any_whitespace=False,
+  ...). xgrammar is importable in the image; 'auto' is vLLM's default
+  resolution path.
+- Corrected run (field structured_outputs {"json": schema}):
+  guided 6/6 schema-valid, unguided 1/6 schema-valid.
+  Guided latencies (s): 0.85, 0.93, 1.31, 2.11, 2.66, 3.63 (median 1.71).
+  Unguided latencies (s): 0.92, 3.40, 3.47, 3.47, 3.48, 3.49 (median 3.47).
+  Unguided Inkling outputs are reasoning-model ramble (one emitted
+  test-fixture-like text about audio.wav-voice-request).
+- First probe attempt (superseded): used the old guided_json field.
+  The server warned it is REMOVED and ignored ("output will NOT be
+  constrained. Use structured_outputs (or response_format) instead"),
+  so those 12 generations were effectively unguided (0/6 "guided",
+  1/6 unguided). The field shape was then verified against
+  StructuredOutputsParams in the image and the probe re-run.
+- Raw records: demo/results_vllm.jsonl (corrected run only).
+
+## Demo 3: standalone CFG sampler, token by token (12 generations)
+- Command: python3 demo/run_sampler_demo.py (Ollama raw mode, seed "{").
+- Run 1 (chat-template backend): 5/12 schema-valid. The template made
+  the model start fresh replies (whitespace, fences); the mask could
+  not tell progress from junk.
+- Run 2 (raw backend, no tail type check): 0/12. The model emitted
+  numbers under string keys ("text": 0.8968..., 1012257...); an
+  unfinished number is a valid JSON prefix, so the sampler spun on
+  digits for 400 steps.
+- Run 3 (raw backend + tail type check in src/cfg.py): 10/12
+  schema-valid in 57.3 s total; valid generations median 0.65 s.
+  Both failures are cloud_exec_envelope: the model fills "id" with
+  digit junk that violates the ^ce-[0-9]{8}-[0-9a-f]{8}$ pattern.
+  Pattern-prefix steering is the known gap (see README limits).
+  Valid outputs carry generic string content ("This is a test
+  sentence.") because the raw backend sees only the partial JSON,
+  not the scenario prompt: the sampler enforces structure, not content.
+- Raw records: demo/results_sampler.jsonl (run 3 only; runs 1-2 numbers
+  above are from the driver logs).
+
+## Example outputs (observed)
+Guided Ollama envelope (valid, all 15 fields):
+{
+  "schema": "tier1-cloud-exec/v1",
+  "id": "ce-20261122-9f3ac21e",
+  "from": "tier1-dispatcher",
+  "to": "muse",
+  "sent_utc": "2026-11-22T06:00:00Z",
+  "capability": "code",
+  "model": "qwen3-coder-gate5",
+  "model_id": "qwen3-coder:30b-a3b-q8_0",
+  "prompt": "Write a Python function that retries an Ollama call with backoff.",
+  "system": null,
+  "max_tokens": 1024,
+  "temperature": 0.5,
+  "result_path": "/srv/dispatcher/cloud_results/ce-20261122-9f3ac21e.json",
+  "audit_id": "audit-20261122-0001",
+  "reason": "local coder model is busy"
+}
+Unguided Ollama, same prompt, starts: ```json\n{\n  "schema": "tier1-cloud-exec/v1", ...
+  (fence makes the raw output unparseable; content inside is correct)
+vLLM guided voice_request: {"text": "Good morning. The gateway cache is warm.", "speaker": "Amit"}
+vLLM unguided voice_request: starts "`,\n        },\n        {\n          id: \"audio.wav-voice-request\", ..."
+  (reasoning-model ramble, not JSON)
+Standalone sampler voice_request: {"text": "This is a test sentence.", "speaker": "Amit"}
+
+## Roster / neatness after the runs
+- Ollama: no models resident (gemma3:4b-it-q8_0 stopped after each demo).
+- P9 gateway :18795 health ok; dispatcher :18791 health ok.
+- p4-vllm container removed after each probe. No downloads, no caches,
+  no intermediate files kept. /tmp probe scripts deleted.
+- Live services (dispatcher, memory, TTS, Qwen-Image, P9) untouched.
+  Dispatcher wiring NOT applied (separate decision; see README).

@@ -1,0 +1,341 @@
+{
+  "seed": 20261125,
+  "temperature": 0.5,
+  "think": false,
+  "dev": [
+    {
+      "id": "dev-01",
+      "schema": "cloud_exec_envelope",
+      "prompt": "Emit exactly one JSON object, the tier1-cloud-exec/v1 envelope for a dispatcher request. Use these exact values: schema \"tier1-cloud-exec/v1\", id \"ce-20261125-7d2e91a4\", from \"tier1-dispatcher\", to \"muse\", sent_utc \"2026-11-25T14:20:00Z\", capability \"review\", model \"muse-glimmer\", model_id \"muse-glimmer:30b-q4_K_M-dflash\", prompt \"Review the gateway guard diff for timeout handling.\", system null, max_tokens 768, temperature 0.4, result_path \"/srv/dispatcher/cloud_results/ce-20261125-7d2e91a4.json\", audit_id \"audit-20261125-0101\", reason \"review model is free\". Output only the JSON object, no other text.",
+      "expected": {
+        "schema": "tier1-cloud-exec/v1",
+        "id": "ce-20261125-7d2e91a4",
+        "from": "tier1-dispatcher",
+        "to": "muse",
+        "sent_utc": "2026-11-25T14:20:00Z",
+        "capability": "review",
+        "model": "muse-glimmer",
+        "model_id": "muse-glimmer:30b-q4_K_M-dflash",
+        "prompt": "Review the gateway guard diff for timeout handling.",
+        "system": null,
+        "max_tokens": 768,
+        "temperature": 0.4,
+        "result_path": "/srv/dispatcher/cloud_results/ce-20261125-7d2e91a4.json",
+        "audit_id": "audit-20261125-0101",
+        "reason": "review model is free"
+      },
+      "max_tokens": 320
+    },
+    {
+      "id": "dev-02",
+      "schema": "cloud_exec_envelope",
+      "prompt": "Emit exactly one JSON object, the tier1-cloud-exec/v1 envelope for a dispatcher request. Use these exact values: schema \"tier1-cloud-exec/v1\", id \"ce-20261125-3b8f05c2\", from \"tier1-dispatcher\", to \"muse\", sent_utc \"2026-11-25T14:25:00Z\", capability \"embed\", model \"bge-m3\", model_id \"bge-m3:latest\", prompt \"Embed the new balcony plant notes for recall.\", system null, max_tokens 256, temperature 0.2, result_path \"/srv/dispatcher/cloud_results/ce-20261125-3b8f05c2.json\", audit_id \"audit-20261125-0102\", reason \"embedding model is idle\". Output only the JSON object, no other text.",
+      "expected": {
+        "schema": "tier1-cloud-exec/v1",
+        "id": "ce-20261125-3b8f05c2",
+        "from": "tier1-dispatcher",
+        "to": "muse",
+        "sent_utc": "2026-11-25T14:25:00Z",
+        "capability": "embed",
+        "model": "bge-m3",
+        "model_id": "bge-m3:latest",
+        "prompt": "Embed the new balcony plant notes for recall.",
+        "system": null,
+        "max_tokens": 256,
+        "temperature": 0.2,
+        "result_path": "/srv/dispatcher/cloud_results/ce-20261125-3b8f05c2.json",
+        "audit_id": "audit-20261125-0102",
+        "reason": "embedding model is idle"
+      },
+      "max_tokens": 320
+    },
+    {
+      "id": "dev-03",
+      "schema": "dispatch_request",
+      "prompt": "Emit exactly one JSON object, a POST /dispatch request body. Use these exact values: text \"How many steps did I walk yesterday?\", dry_run false, capability \"chat\", prefer_cloud false, max_tokens 64, temperature 0.5, timeout null, voice false. Output only the JSON object, no other text.",
+      "expected": {
+        "text": "How many steps did I walk yesterday?",
+        "dry_run": false,
+        "capability": "chat",
+        "prefer_cloud": false,
+        "max_tokens": 64,
+        "temperature": 0.5,
+        "timeout": null,
+        "voice": false
+      },
+      "max_tokens": 192
+    },
+    {
+      "id": "dev-04",
+      "schema": "dispatch_request",
+      "prompt": "Emit exactly one JSON object, a POST /dispatch request body. Use these exact values: text \"Summarise the Inkling retry findings in one paragraph.\", dry_run false, capability \"chat\", prefer_cloud false, max_tokens 512, temperature 0.6, timeout null, voice false. Output only the JSON object, no other text.",
+      "expected": {
+        "text": "Summarise the Inkling retry findings in one paragraph.",
+        "dry_run": false,
+        "capability": "chat",
+        "prefer_cloud": false,
+        "max_tokens": 512,
+        "temperature": 0.6,
+        "timeout": null,
+        "voice": false
+      },
+      "max_tokens": 192
+    },
+    {
+      "id": "dev-05",
+      "schema": "memory_remember",
+      "prompt": "Emit exactly one JSON object, a POST /remember request body. Use these exact values: text \"Nitish wears a RingConn smart ring.\", type \"fact\", title \"ring\", author \"Nitish\", source \"chat\", salience 0.6. Output only the JSON object, no other text.",
+      "expected": {
+        "text": "Nitish wears a RingConn smart ring.",
+        "type": "fact",
+        "title": "ring",
+        "author": "Nitish",
+        "source": "chat",
+        "salience": 0.6
+      },
+      "max_tokens": 192
+    },
+    {
+      "id": "dev-06",
+      "schema": "memory_remember",
+      "prompt": "Emit exactly one JSON object, a POST /remember request body. Use these exact values: text \"The TTS morning brief goes out at 06:30.\", type \"decision\", title \"morning brief time\", author \"Muse\", source \"eval\", salience 0.9. Output only the JSON object, no other text.",
+      "expected": {
+        "text": "The TTS morning brief goes out at 06:30.",
+        "type": "decision",
+        "title": "morning brief time",
+        "author": "Muse",
+        "source": "eval",
+        "salience": 0.9
+      },
+      "max_tokens": 192
+    },
+    {
+      "id": "dev-07",
+      "schema": "memory_recall",
+      "prompt": "Emit exactly one JSON object, a POST /recall request body. Use these exact values: text \"What did Nitish decide about the overcoat?\", top_k 5, as_of \"2026-11-25T14:00:00Z\". Output only the JSON object, no other text.",
+      "expected": {
+        "text": "What did Nitish decide about the overcoat?",
+        "top_k": 5,
+        "as_of": "2026-11-25T14:00:00Z"
+      },
+      "max_tokens": 128
+    },
+    {
+      "id": "dev-08",
+      "schema": "memory_recall",
+      "prompt": "Emit exactly one JSON object, a POST /recall request body. Use these exact values: text \"When is the next Tube strike?\", top_k 3, as_of \"2026-11-25T14:05:00Z\". Output only the JSON object, no other text.",
+      "expected": {
+        "text": "When is the next Tube strike?",
+        "top_k": 3,
+        "as_of": "2026-11-25T14:05:00Z"
+      },
+      "max_tokens": 128
+    },
+    {
+      "id": "dev-09",
+      "schema": "voice_request",
+      "prompt": "Emit exactly one JSON object, a POST /voice request body. Use these exact values: text \"Good evening. The image job finished.\", speaker \"Amit\". Output only the JSON object, no other text.",
+      "expected": {
+        "text": "Good evening. The image job finished.",
+        "speaker": "Amit"
+      },
+      "max_tokens": 128
+    },
+    {
+      "id": "dev-10",
+      "schema": "voice_request",
+      "prompt": "Emit exactly one JSON object, a POST /voice request body. Use these exact values: text \"Your umbrella code arrives tomorrow morning.\", speaker \"Amit\". Output only the JSON object, no other text.",
+      "expected": {
+        "text": "Your umbrella code arrives tomorrow morning.",
+        "speaker": "Amit"
+      },
+      "max_tokens": 128
+    },
+    {
+      "id": "dev-11",
+      "schema": "gateway_query",
+      "prompt": "Emit exactly one JSON object, a POST /query request body for the semantic gateway. Use this exact value: text \"What is the P4 memory service port?\". Output only the JSON object, no other text.",
+      "expected": {
+        "text": "What is the P4 memory service port?"
+      },
+      "max_tokens": 96
+    },
+    {
+      "id": "dev-12",
+      "schema": "gateway_query",
+      "prompt": "Emit exactly one JSON object, a POST /query request body for the semantic gateway. Use this exact value: text \"How do I check the resource manager queue?\". Output only the JSON object, no other text.",
+      "expected": {
+        "text": "How do I check the resource manager queue?"
+      },
+      "max_tokens": 96
+    }
+  ],
+  "holdout": [
+    {
+      "id": "holdout-01",
+      "schema": "cloud_exec_envelope",
+      "prompt": "Emit exactly one JSON object, the tier1-cloud-exec/v1 envelope for a dispatcher request. Use these exact values: schema \"tier1-cloud-exec/v1\", id \"ce-20261125-e51a68d9\", from \"tier1-dispatcher\", to \"muse\", sent_utc \"2026-11-25T15:00:00Z\", capability \"image\", model \"z-image-turbo\", model_id \"z-image-turbo\", prompt \"Render a report card figure for the gateway eval.\", system null, max_tokens 1536, temperature 0.8, result_path \"/srv/dispatcher/cloud_results/ce-20261125-e51a68d9.json\", audit_id \"audit-20261125-0201\", reason \"image model needs cloud fallback\". Output only the JSON object, no other text.",
+      "expected": {
+        "schema": "tier1-cloud-exec/v1",
+        "id": "ce-20261125-e51a68d9",
+        "from": "tier1-dispatcher",
+        "to": "muse",
+        "sent_utc": "2026-11-25T15:00:00Z",
+        "capability": "image",
+        "model": "z-image-turbo",
+        "model_id": "z-image-turbo",
+        "prompt": "Render a report card figure for the gateway eval.",
+        "system": null,
+        "max_tokens": 1536,
+        "temperature": 0.8,
+        "result_path": "/srv/dispatcher/cloud_results/ce-20261125-e51a68d9.json",
+        "audit_id": "audit-20261125-0201",
+        "reason": "image model needs cloud fallback"
+      },
+      "max_tokens": 320
+    },
+    {
+      "id": "holdout-02",
+      "schema": "cloud_exec_envelope",
+      "prompt": "Emit exactly one JSON object, the tier1-cloud-exec/v1 envelope for a dispatcher request. Use these exact values: schema \"tier1-cloud-exec/v1\", id \"ce-20261125-90c4f7b3\", from \"tier1-dispatcher\", to \"muse\", sent_utc \"2026-11-25T15:05:00Z\", capability \"tts\", model \"indic-speak\", model_id \"bodhan-ai/indic-speak\", prompt \"Synthesise the morning brief for Nitish.\", system null, max_tokens 384, temperature 0.6, result_path \"/srv/dispatcher/cloud_results/ce-20261125-90c4f7b3.json\", audit_id \"audit-20261125-0202\", reason \"tts model is busy\". Output only the JSON object, no other text.",
+      "expected": {
+        "schema": "tier1-cloud-exec/v1",
+        "id": "ce-20261125-90c4f7b3",
+        "from": "tier1-dispatcher",
+        "to": "muse",
+        "sent_utc": "2026-11-25T15:05:00Z",
+        "capability": "tts",
+        "model": "indic-speak",
+        "model_id": "bodhan-ai/indic-speak",
+        "prompt": "Synthesise the morning brief for Nitish.",
+        "system": null,
+        "max_tokens": 384,
+        "temperature": 0.6,
+        "result_path": "/srv/dispatcher/cloud_results/ce-20261125-90c4f7b3.json",
+        "audit_id": "audit-20261125-0202",
+        "reason": "tts model is busy"
+      },
+      "max_tokens": 320
+    },
+    {
+      "id": "holdout-03",
+      "schema": "dispatch_request",
+      "prompt": "Emit exactly one JSON object, a POST /dispatch request body. Use these exact values: text \"What is the weather in London tomorrow?\", dry_run false, capability \"chat\", prefer_cloud false, max_tokens 128, temperature 0.5, timeout null, voice false. Output only the JSON object, no other text.",
+      "expected": {
+        "text": "What is the weather in London tomorrow?",
+        "dry_run": false,
+        "capability": "chat",
+        "prefer_cloud": false,
+        "max_tokens": 128,
+        "temperature": 0.5,
+        "timeout": null,
+        "voice": false
+      },
+      "max_tokens": 192
+    },
+    {
+      "id": "holdout-04",
+      "schema": "dispatch_request",
+      "prompt": "Emit exactly one JSON object, a POST /dispatch request body. Use these exact values: text \"Read the latest message from Maa out loud.\", dry_run false, capability \"chat\", prefer_cloud false, max_tokens 256, temperature 0.7, timeout null, voice true. Output only the JSON object, no other text.",
+      "expected": {
+        "text": "Read the latest message from Maa out loud.",
+        "dry_run": false,
+        "capability": "chat",
+        "prefer_cloud": false,
+        "max_tokens": 256,
+        "temperature": 0.7,
+        "timeout": null,
+        "voice": true
+      },
+      "max_tokens": 192
+    },
+    {
+      "id": "holdout-05",
+      "schema": "memory_remember",
+      "prompt": "Emit exactly one JSON object, a POST /remember request body. Use these exact values: text \"Blunt Metro umbrella is the compact pick.\", type \"preference\", title \"umbrella pick\", author \"Nitish\", source \"chat\", salience 0.8. Output only the JSON object, no other text.",
+      "expected": {
+        "text": "Blunt Metro umbrella is the compact pick.",
+        "type": "preference",
+        "title": "umbrella pick",
+        "author": "Nitish",
+        "source": "chat",
+        "salience": 0.8
+      },
+      "max_tokens": 192
+    },
+    {
+      "id": "holdout-06",
+      "schema": "memory_remember",
+      "prompt": "Emit exactly one JSON object, a POST /remember request body. Use these exact values: text \"The small-model trial queued behind the image job.\", type \"incident\", title \"trial queue\", author \"Jarvis\", source \"systemd\", salience 0.5. Output only the JSON object, no other text.",
+      "expected": {
+        "text": "The small-model trial queued behind the image job.",
+        "type": "incident",
+        "title": "trial queue",
+        "author": "Jarvis",
+        "source": "systemd",
+        "salience": 0.5
+      },
+      "max_tokens": 192
+    },
+    {
+      "id": "holdout-07",
+      "schema": "memory_recall",
+      "prompt": "Emit exactly one JSON object, a POST /recall request body. Use these exact values: text \"Which model won the small-model trial?\", top_k 5, as_of \"2026-11-25T15:00:00Z\". Output only the JSON object, no other text.",
+      "expected": {
+        "text": "Which model won the small-model trial?",
+        "top_k": 5,
+        "as_of": "2026-11-25T15:00:00Z"
+      },
+      "max_tokens": 128
+    },
+    {
+      "id": "holdout-08",
+      "schema": "memory_recall",
+      "prompt": "Emit exactly one JSON object, a POST /recall request body. Use these exact values: text \"What time is the morning brief?\", top_k 3, as_of \"2026-11-25T15:05:00Z\". Output only the JSON object, no other text.",
+      "expected": {
+        "text": "What time is the morning brief?",
+        "top_k": 3,
+        "as_of": "2026-11-25T15:05:00Z"
+      },
+      "max_tokens": 128
+    },
+    {
+      "id": "holdout-09",
+      "schema": "voice_request",
+      "prompt": "Emit exactly one JSON object, a POST /voice request body. Use these exact values: text \"The small-model trial has a new result.\", speaker \"Amit\". Output only the JSON object, no other text.",
+      "expected": {
+        "text": "The small-model trial has a new result.",
+        "speaker": "Amit"
+      },
+      "max_tokens": 128
+    },
+    {
+      "id": "holdout-10",
+      "schema": "voice_request",
+      "prompt": "Emit exactly one JSON object, a POST /voice request body. Use these exact values: text \"Good night. The brief is ready for tomorrow.\", speaker \"Amit\". Output only the JSON object, no other text.",
+      "expected": {
+        "text": "Good night. The brief is ready for tomorrow.",
+        "speaker": "Amit"
+      },
+      "max_tokens": 128
+    },
+    {
+      "id": "holdout-11",
+      "schema": "gateway_query",
+      "prompt": "Emit exactly one JSON object, a POST /query request body for the semantic gateway. Use this exact value: text \"What is the gateway cache hit rate today?\". Output only the JSON object, no other text.",
+      "expected": {
+        "text": "What is the gateway cache hit rate today?"
+      },
+      "max_tokens": 96
+    },
+    {
+      "id": "holdout-12",
+      "schema": "gateway_query",
+      "prompt": "Emit exactly one JSON object, a POST /query request body for the semantic gateway. Use this exact value: text \"What models are loaded on the box right now?\". Output only the JSON object, no other text.",
+      "expected": {
+        "text": "What models are loaded on the box right now?"
+      },
+      "max_tokens": 96
+    }
+  ]
+}

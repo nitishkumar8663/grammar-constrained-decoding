@@ -1,0 +1,94 @@
+{
+  "guided": {
+    "label": "guided",
+    "n": 100,
+    "json_valid": 100,
+    "schema_valid": 100,
+    "json_rate": 1.0,
+    "schema_rate": 1.0,
+    "median_seconds": 1.27,
+    "p95_seconds": 6.5,
+    "mean_seconds": 1.91,
+    "median_eval_tok_per_s": 47.3,
+    "by_schema": {
+      "cloud_exec_envelope": {
+        "n": 17,
+        "schema_ok": 17,
+        "json_ok": 17
+      },
+      "dispatch_request": {
+        "n": 17,
+        "schema_ok": 17,
+        "json_ok": 17
+      },
+      "gateway_query": {
+        "n": 16,
+        "schema_ok": 16,
+        "json_ok": 16
+      },
+      "memory_recall": {
+        "n": 17,
+        "schema_ok": 17,
+        "json_ok": 17
+      },
+      "memory_remember": {
+        "n": 17,
+        "schema_ok": 17,
+        "json_ok": 17
+      },
+      "voice_request": {
+        "n": 16,
+        "schema_ok": 16,
+        "json_ok": 16
+      }
+    }
+  },
+  "unguided": {
+    "label": "unguided",
+    "n": 100,
+    "json_valid": 0,
+    "schema_valid": 0,
+    "json_rate": 0.0,
+    "schema_rate": 0.0,
+    "median_seconds": 1.44,
+    "p95_seconds": 5.8,
+    "mean_seconds": 2.0,
+    "median_eval_tok_per_s": 51.7,
+    "by_schema": {
+      "cloud_exec_envelope": {
+        "n": 17,
+        "schema_ok": 0,
+        "json_ok": 0
+      },
+      "dispatch_request": {
+        "n": 17,
+        "schema_ok": 0,
+        "json_ok": 0
+      },
+      "gateway_query": {
+        "n": 16,
+        "schema_ok": 0,
+        "json_ok": 0
+      },
+      "memory_recall": {
+        "n": 17,
+        "schema_ok": 0,
+        "json_ok": 0
+      },
+      "memory_remember": {
+        "n": 17,
+        "schema_ok": 0,
+        "json_ok": 0
+      },
+      "voice_request": {
+        "n": 16,
+        "schema_ok": 0,
+        "json_ok": 0
+      }
+    }
+  },
+  "latency_overhead_guided_vs_unguided_median": 0.88,
+  "model": "gemma3:4b-it-q8_0",
+  "temperature": 0.7,
+  "wall_seconds": 390.5
+}
